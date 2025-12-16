@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "title": "answerWidth",
+    "type": "jquery",
+    "code": "<style label=\"answerWidth\" cond=\"not gv.request.device.isMobileDevice()\" arg:tw=\"850px\" name=\"question.after\"><![CDATA[\n<style>\n    .grid.grid-table-mode.setWidth {\n max-width: $(tw) !important;\n    }\n\n</style>\n]]></style>",
+    "created": "2025-12-16"
+  }
+]
