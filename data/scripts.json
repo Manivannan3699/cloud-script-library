@@ -1,62 +1,82 @@
 [
   {
+    "type": "jquery",
     "title": "answerWidth",
-    "type": "jquery",
     "code": "<style label=\"answerWidth\" cond=\"not gv.request.device.isMobileDevice()\" arg:tw=\"850px\" name=\"question.after\"><![CDATA[\n<style>\n    .grid.grid-table-mode.setWidth {\n max-width: $(tw) !important;\n    }\n\n</style>\n]]></style>",
-    "created": "2025-12-16"
+    "tags": [
+      "style"
+    ]
   },
   {
-    "title": "Grid header - subQuestionHeader1",
     "type": "jquery",
+    "title": "subQuestionHeader1",
     "code": "<style label=\"subQuestionHeader1\" arg:headerText=\"testing\" name=\"question.left-blank-legend\"><![CDATA[\n<$(tag) rowspan=\"2\" class=\"cell nonempty legend sub-question-header\">\n  <center><strong>$(headerText)</strong></center>\n</$(tag)>\n<script>\ndocument.querySelectorAll('.sub-question-header')[1].style.display = 'none';\n</script>\n]]></style>",
-    "created": "2025-12-16T13:26:34.938Z"
+    "tags": [
+      "style"
+    ]
   },
   {
-    "title": "hideElements",
     "type": "jquery",
+    "title": "hideElements1",
     "code": "<style label=\"hideElements1\" name=\"question.element\"><![CDATA[\n\\@if ec.simpleList\n<div class=\"element $(rowStyle) $(levels) $(extraClasses) ${col.group.styles.ss.groupClassNames if col.group else (row.group.styles.ss.groupClassNames if row.group else \"\")} $(col.styles.ss.colClassNames) $(row.styles.ss.rowClassNames) ${\"clickableCell\" if isClickable else \"\"}\"$(extra)>\n   ${v2_insertStyle('el.label.start')}\n   ${v2_insertStyle('el.label.end')}\n</div>\n\\@else\n<$(tag) $(headers) class=\"cell nonempty element $(levels) ${\"desktop\" if this.grouping.cols else \"mobile\"} border-collapse $(extraClasses) ${col.group.styles.ss.groupClassNames if col.group else (row.group.styles.ss.groupClassNames if row.group else \"\")} $(col.styles.ss.colClassNames) $(row.styles.ss.rowClassNames) ${\"clickableCell\" if isClickable else \"\"}\"$(extra)>\n   ${v2_insertStyle('el.label.start')}\n   ${v2_insertStyle('el.label.end')}\n</$(tag)>\n\\@endif\n]]></style>",
-    "created": "2025-12-16T13:27:12.851Z"
+    "tags": [
+      "style"
+    ]
   },
   {
-    "title": "OE validation - Numeric question",
-    "type": "python",
-    "code": "def validate_open_rows(this, row_list):\n for row_name in row_list:\n  eachRow = eval(\"this.%s\" % row_name)\n  has_values = any(\n   this.rows[eachRow.index][eachCol.index].val not in [0, \"\", None]\n   for eachCol in this.cols\n  )\n  if has_values and eachRow.open in [\"\", None]:\n   error(this.lget(\"extraInfo\"), eachRow)\n  elif not has_values and eachRow.open not in [\"\", None]:\n   error(this.lget(\"extraSelect\"), eachRow)",
-    "created": "2025-12-16T13:28:07.034Z"
-  },
-  {
-    "title": "tableWidth = Automatically adjust width",
     "type": "jquery",
+    "title": "tableWidth",
     "code": "<style label=\"tableWidth\" cond=\"1\" arg:tx=\"900px\" arg:tx2=\"35.5%\" name=\"question.after\"><![CDATA[\n<script>\nsetInterval(function(){\n$ ('.question').addClass('disableMobileAccordion'); \n$ ('.answers').removeClass('answers-list').addClass('answers-table');    \n$ ('.grid').removeClass('grid-list-mode').addClass('grid-table-mode');\n$ (\"th[scope*=col]\").css('width','fit-content').css('min-width','20px').css('max-width','120px');\n},0);\n</script>\n\n<style>\n.grid.grid-table-mode.setWidth {\n    width: $(tx) !important;\n}\n.grid.grid-table-mode .colCount-7 .col-legend {\n    width: $(tx2);\n}\n</style>\n]]></style>",
-    "created": "2025-12-16T13:29:36.034Z"
+    "tags": [
+      "style"
+    ]
   },
   {
-    "title": "Readonly_row_col",
     "type": "jquery",
+    "title": "readonly_row_col",
     "code": "<style label=\"readonly_row_col\" cond=\"1\" arg:qn=\"\" name=\"el.text\"><![CDATA[\n<input type=\"number\" name=\"$(name)\" id=\"$(id)\" value=\"$(value)\" size=\"$(size)\" readonly style=\"background-color: #ccc;color: red; font-weight: bold; width: 4em; text-align:center;\" class=\"input text-input\" aria-labelledby=\"$(qn)_${row.label}_left $(qn)_${col.label}\" $(extra)/>\n\\@if row.styles.ss.postText or this.styles.ss.postText\n<span class=\"post-text\">\n    &nbsp;${row.styles.ss.postText or this.styles.ss.postText or \"\"}\n</span>\n\\@endif\n]]></style>",
-    "created": "2025-12-16T13:30:53.941Z"
+    "tags": [
+      "style"
+    ]
   },
   {
+    "type": "jquery",
     "title": "mobilescreen1",
-    "type": "jquery",
     "code": "<style label=\"mobilescreen1\" name=\"question.after\"><![CDATA[\n<div id=\"mobiinst\">\n  <div class=\"mobi-msg\">${res.pipe_mobilescreen}</div>\n  <img src=\"[rel phone.gif]\" alt=\"Rotate phone\" />\n  <br/>\n  <img src=\"[rel mobile_flip.png]\" alt=\"Flip phone\" />\n</div>\n\n<script>\n$ (document).ready(function(){\n  var isMobile = ${\"1\" if gv.request.device.isMobileDevice() else \"0\"};\n\n  function adjustViewport() {\n    var landscape = window.matchMedia(\"(orientation: landscape)\").matches;\n    var content = landscape\n      ? \"width=920, initial-scale=0.8, maximum-scale=1.0, user-scalable=no\"\n      : \"width=device-width, initial-scale=0.9, maximum-scale=1.0, user-scalable=no\";\n\n    // if <meta name=\"viewport\"> doesn’t exist, create it\n    if ($ (\"meta[name=viewport]\").length === 0) {\n      $ (\"head\").append('<meta name=\"viewport\">');\n    }\n    $ (\"meta[name=viewport]\").attr(\"content\", content);\n  }\n\n  function checkOrientation(){\n    $ (\"#mobiinst\").toggle(!window.matchMedia(\"(orientation: landscape)\").matches && isMobile==1);\n    adjustViewport();\n  }\n\n  $ (window).on(\"orientationchange resize\", checkOrientation);\n  checkOrientation(); // run on load\n\n  // Fix answers/grid layout once\n  $ ('.answers').removeClass('answers-list').addClass('answers-table');    \n  $ ('.grid').removeClass('grid-list-mode').addClass('grid-table-mode');\n});\n</script>\n\n<style>\n#mobiinst {\n  display: none;\n  position: absolute;\n  top: 0;\n  left: 0;\n  padding: 100px 10px 0 10px;\n  z-index: 9999;\n  width: 100%;\n  height: 100vh;\n  color: red;\n  background-color: #E0E0E0;\n}\n#mobiinst img {\n  max-width: 350px;\n  display: block;\n  height: auto;\n}\n.mobi-msg {\n  width: 350px;\n}\n</style>\n]]></style>",
-    "created": "2025-12-16T13:32:01.907Z"
+    "tags": [
+      "JS"
+    ]
   },
   {
-    "title": "Autosum question (hide respective column total )",
     "type": "jquery",
+    "title": "first_column_sum_hide_selected",
     "code": "<style label=\"first_column_sum_hide_selected\" cond=\"1\" arg:cols=\"0,2\" name=\"question.after\"><![CDATA[\n<script>\n$ (document).ready(function () {\n  const qns = \"$(cols)\".split(\",\").map(q => parseInt(q.trim()));\n\n  setTimeout(function () {\n    qns.forEach(function (i) {\n      $ (\"td.sq-autosum-col\").eq(i).html(\"\"); // Clear content of each target column\n    });\n  }, 0);\n});\n</script>\n]]></style>",
-    "created": "2025-12-16T13:33:27.566Z"
+    "tags": [
+      "style"
+    ]
   },
   {
+    "type": "jquery",
     "title": "autosum_With_None",
-    "type": "jquery",
     "code": "<style label=\"autosum_With_None\" cond=\"0\" arg:cls=\"\" arg:qn=\"\" name=\"question.after\"><![CDATA[\n<script>\n$ (document).ready(function () {\n    // Detect the total number of columns by checking .colX class names\n    const columnCount = $ (\"[class*='col']\").filter(function () {\n        return this.className.match(/\\bcol\\d+\\b/);\n    }).map(function () {\n        const match = this.className.match(/\\bcol(\\d+)\\b/);\n        return match ? parseInt(match[1], 10) : null;\n    }).get().reduce((max, num) => Math.max(max, num), 0);\n\n    // Loop through columns and move checkbox input into corresponding .None cell\n    for (let i = 1; i <= columnCount; i++) {\n        $ (\".col\" + i + \".None1\").append($ (\".row\" + i + \" .input\").parent());\n    }\n\n    // Hide question\n    // $ ('#question_$(qn)').hide();\n    $ ('.$(cls)').hide();\n\n    // Checkbox change logic\n    $ (\".checkbox\").on(\"change\", function () {\n        for (let i = 1; i <= columnCount; i++) {\n            const $col = $ (\".col\" + i);\n            if ($col.find(\".checkbox:checked\").length > 0) {\n                $col.find(\".text-input\").val('').change();\n            } else {\n                $col.find(\".text-input\").css({\n                    // 'background-color': '',\n                    'pointer-events': ''\n                });\n            }\n        }\n    });\n\n    // Text input logic\n    for (let i = 1; i <= columnCount; i++) {\n        const $col = $ (\".col\" + i);\n        $col.find(\".text-input\").on(\"input\", function () {\n            $col.find(\".checkbox\").prop(\"checked\", false).trigger(\"change\");\n        });\n    }\n});\n</script>\n]]></style>\n\n  <number \n   label=\"Q110\"\n   autosumdq:operator=\"eq\"\n   autosumdq:sumToVal=\"S9.r1.c2.ival+S9.r2.c2.ival,S9.r1.c3.ival+S9.r2.c3.ival\"\n   grouping=\"cols\"\n   optional=\"0\"\n   size=\"4\"\n   uses=\"autosumdq.6\"\n   verify=\"range(0,999)\">\n    <title>Of the <b>${S9.r1.c2.ival + S9.r2.c2.ival} Phenylketonuria (PKU) patients</b> that are <b>&lt;12 years old</b> with <b>mild-moderate disease</b> and the <b>${S9.r1.c3.ival + S9.r2.c3.ival} patients</b> that are <b>&lt;12 years old</b> with <b>classic/severe disease</b> that you [pipe: hPipe_S8] in the past 12 months, how many received each of the <b>following treatments</b>?</title>\n    <comment>Please enter a whole number in each box.</comment>\n    <exec>\nautoSumEvalPrevResponses(this)\n    </exec>\n\n    <validate>\n# autoSumValidate(this)\nvalidate_open_rows(this, ['r98'])\n\nc1_sum = S9.r1.c2.ival + S9.r2.c2.ival\nc2_sum = S9.r1.c3.ival + S9.r2.c3.ival\nif (c1_sum gt 0) and not Q110x1.r1 and Q110.c1.sum != c1_sum:\n\terror(this.lget('point-mismatch', sum=c1_sum , points=Q110.c1.sum ), col=Q110.c1)\nif (c2_sum gt 0) and not Q110x1.r2 and Q110.c2.sum != c2_sum:\n\terror(this.lget('point-mismatch', sum=c2_sum , points=Q110.c2.sum ), col=Q110.c2)\n    </validate>\n\n    <col label=\"c1\" cond=\"(S9.r1.c2.ival + S9.r2.c2.ival) gt 0\" ss:colClassNames=\"col1\"><b>&lt;12 years old</b> with <b>mild</b><b>-moderate </b>disease <b>(Untreated Phe levels 601-1200 μmol/L)</b></col>\n    <col label=\"c2\" cond=\"(S9.r1.c3.ival + S9.r2.c3.ival) gt 0\" ss:colClassNames=\"col2\"><b>&lt;12 years old</b> with<b> classic/severe </b>disease <b>(Untreated Phe levels &gt;1200 μmol/L)</b></col>\n    <row label=\"r1\">Sepiapterin (SEPHIENCE) + diet restrictions / medical nutrition therapy (MNT)</row>\n    <row label=\"r2\">Pegvaliase (PALYNZIQ) +/- diet restrictions / medical nutrition therapy (MNT)</row>\n    <row label=\"r3\" cond=\"hCountry.US or hCountry.DE or hCountry.IT\">Generic Sapropterin [pipe: pipe_Q100_r3] + diet restrictions / medical nutrition therapy (MNT)</row>\n    <row label=\"r4\">Branded Sapropterin [pipe: pipe_Q100_r4] + diet restrictions / medical nutrition therapy (MNT)</row>\n    <row label=\"r5\" cond=\"hCountry.US\">Branded Sapropterin (Javygtor) + diet restrictions / medical nutrition therapy (MNT)</row>\n    <row label=\"r6\">Diet restrictions / medical nutrition therapy (MNT) only</row>\n    <row label=\"r98\" open=\"1\" openOptional=\"1\" openSize=\"25\" optional=\"1\" randomize=\"0\">Other (please specify:)</row>\n    <row label=\"r99\" optional=\"1\" randomize=\"0\" ss:rowClassNames=\"None1\" where=\"survey,report,notdp\">None of the above</row>\n    <style arg:headerText=\"${res.Hedder_Q110}\" copy=\"subQuestionHeader1\" name=\"question.left-blank-legend\"/>\n    <style cond=\"1\" arg:cls=\"Q110x1\" copy=\"autosum_With_None\" name=\"question.after\"/>\n    <style name=\"el.text\" rows=\"r99\"/>\n    <style cond=\"gv.request.device.isMobileDevice()\" copy=\"mobilescreen1\" name=\"question.after\"/>\n    <style cond=\"not gv.request.device.isMobileDevice()\" arg:tw=\"900px\" copy=\"answerWidth\" name=\"question.after\"/>\n  </number>\n\n  <checkbox \n   label=\"Q110x1\"\n   ss:questionClassNames=\"Q110x1\">\n    <title><span></span></title>\n    <row label=\"r1\" ss:rowClassNames=\"row1\"><b>&lt;12 years old</b> with <b>mild</b><b>-moderate </b>disease <b>(Untreated Phe levels 601-1200 μmol/L)</b></row>\n    <row label=\"r2\" ss:rowClassNames=\"row2\"><b>&lt;12 years old</b> with<b> classic/severe </b>disease <b>(Untreated Phe levels &gt;1200 μmol/L)</b></row>\n  </checkbox>",
-    "created": "2025-12-16T14:33:32.871Z"
+    "tags": [
+      "JS"
+    ]
   },
   {
-    "title": "Tooltip",
     "type": "jquery",
+    "title": "Tooltip",
     "code": "<style label=\"Tooltip\" name=\"question.after\"><![CDATA[\n<style>\n.custom-tooltip {\n  position: absolute;\n  max-width: 40vw;\n  padding: 6px 10px;\n  border-radius: 6px;\n  font-size: 0.85em;\n  z-index: 10000;\n  background: #000;\n  color: #fff;\n  border: 1px solid #333;\n  box-shadow: 0 2px 6px rgba(0,0,0,0.3);\n  pointer-events: none;\n  opacity: 0;\n  transition: opacity 0.2s;\n  word-wrap: break-word;\n}\n\n.custom-tooltip::after {\n  content: '';\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  border: 6px solid transparent;\n}\n\n.custom-tooltip.bottom::after { bottom: 100%; border-bottom-color: #000; }\n.custom-tooltip.top::after { top: 100%; border-top-color: #000; }\n\n[data-tooltip] { color: #007ac0; cursor: pointer; }\n\n\\@media screen and (max-width: 768px) {\n  .custom-tooltip { max-width: 80%; }\n}\n</style>\n\n<script>\ndocument.addEventListener('DOMContentLoaded', function() {\n  const tooltip = document.createElement('div');\n  tooltip.className = 'custom-tooltip bottom';\n  document.body.appendChild(tooltip);\n\n  function showTooltip(e) {\n    const el = e.currentTarget;\n    const content = el.getAttribute('data-tooltip');\n    if (!content) return;\n\n    tooltip.innerHTML = content;\n    tooltip.style.opacity = '0';\n    tooltip.style.display = 'block';\n\n    const rect = el.getBoundingClientRect();\n    const ttW = tooltip.offsetWidth, ttH = tooltip.offsetHeight;\n    const scrollY = window.scrollY, scrollX = window.scrollX;\n\n    // Choose placement\n    const spaceBelow = window.innerHeight - rect.bottom;\n    const placement = (spaceBelow > ttH + 8) ? 'bottom' : 'top';\n    tooltip.className = 'custom-tooltip ' + placement;\n\n    const left = Math.max(4, Math.min(\n      rect.left + rect.width / 2 - ttW / 2 + scrollX,\n      window.innerWidth - ttW - 4\n    ));\n    const top = (placement === 'bottom')\n      ? rect.bottom + scrollY + 8\n      : rect.top + scrollY - ttH - 8;\n\n    tooltip.style.left = left + 'px';\n    tooltip.style.top = top + 'px';\n    tooltip.style.opacity = '1';\n  }\n\n  function hideTooltip() {\n    tooltip.style.opacity = '0';\n  }\n\n  document.querySelectorAll('[data-tooltip]').forEach(el => {\n    el.addEventListener('mouseenter', showTooltip);\n    el.addEventListener('mouseleave', hideTooltip);\n    el.addEventListener('touchstart', showTooltip);\n    el.addEventListener('touchend', hideTooltip);\n  });\n\n  window.addEventListener('scroll', hideTooltip);\n  window.addEventListener('resize', hideTooltip);\n});\n</script>\n]]></style>\n\n<res label=\"T1\"><span data-tooltip=\"${res.T22}\" data-tooltip-theme=\"tooltip-theme-yellow\">HR <b>BCG Naïve</b> NMIBC</span></res>\n<res label=\"T22\">Patients with <b><u>papillary-only</u></b> high-risk non-muscle invasive bladder cancer (HR NMIBC) who have previously received a full course of BCG therapy and are either:<br /><br /><ul><li />BCG Experienced (i.e., recurrence after an initial complete response to BCG)<li />BCG Unresponsive (i.e., persistent or recurrent disease despite adequate BCG <b>* <u>AND</u> CIS within 12 months or HGTa or T1 within 6 months)</b></ul><i>* Adequate Induction (5 of 6 doses) + either 2 of 3 doses of Maintenance OR 2 of 6 doses of second induction</i></res>",
-    "created": "2025-12-16T17:00:43.365Z"
+    "tags": [
+      "Generic setups"
+    ]
+  },
+  {
+    "type": "python",
+    "title": "OE validation - Numeric question",
+    "code": "def validate_open_rows(this, row_list):\n for row_name in row_list:\n  eachRow = eval(\"this.%s\" % row_name)\n  has_values = any(\n   this.rows[eachRow.index][eachCol.index].val not in [0, \"\", None]\n   for eachCol in this.cols\n  )\n  if has_values and eachRow.open in [\"\", None]:\n   error(this.lget(\"extraInfo\"), eachRow)\n  elif not has_values and eachRow.open not in [\"\", None]:\n   error(this.lget(\"extraSelect\"), eachRow)",
+    "tags": [
+      "validation"
+    ]
   }
 ]
