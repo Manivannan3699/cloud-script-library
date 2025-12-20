@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Internal Script Library</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root{
+  --bg:#f4f6fb;
+  --panel:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e5e7eb;
+  --accent:#4f46e5;
+  --danger:#dc2626;
+  --shadow:0 10px 25px rgba(0,0,0,.08);
+}
+body.dark{
+  --bg:#020617;
+  --panel:#020617;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --border:#1e293b;
+  --accent:#6366f1;
+  --shadow:0 10px 25px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Arial;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* HEADER */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 24px;
+  border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:32px}
+header h1{margin:0;font-size:18px}
+
+header button{
+  margin-left:8px;
+  padding:8px 14px;
+  border:none;
+  border-radius:10px;
+  background:var(--accent);
+  color:#fff;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* MAIN */
+.main{padding:32px}
+
+/* DASHBOARD */
+.dashboard{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:24px;
+}
+.card{
+  background:var(--panel);
+  padding:28px;
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  transition:.25s;
+}
+.card:hover{transform:translateY(-6px)}
+.card h2{margin:0 0 6px}
+.card p{margin:0;color:var(--muted)}
+.badge{
+  margin-top:12px;
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:12px;
+}
+
+/* LIBRARY */
+.library{display:none}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.search{
+  width:320px;
+  padding:10px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:16px;
+}
+.script{
+  background:var(--panel);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+}
+.script h4{margin:0 0 6px}
+.tags span{
+  display:inline-block;
+  margin:4px 4px 0 0;
+  padding:3px 8px;
+  background:var(--border);
+  border-radius:999px;
+  font-size:11px;
+}
+
+/* EDITOR */
+.editor{margin-top:24px;display:none}
+input,textarea{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+  margin-bottom:10px;
+}
+textarea{min-height:260px;font-family:monospace}
+
+.footer-actions button{
+  margin-right:8px;
+  padding:8px 14px;
+  border:none;
+  border-radius:10px;
+  background:var(--accent);
+  color:#fff;
+  cursor:pointer;
+}
+.danger{background:var(--danger)}
+
+/* DIFF */
+.diff{
+  margin-top:20px;
+  display:none;
+  font-family:monospace;
+  background:var(--panel);
+  padding:16px;
+  border-radius:14px;
+}
+.add{color:#16a34a}
+.del{color:#dc2626}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <!-- replace with your logo -->
+    <img src="logo.png" alt="Logo">
+    <h1>Internal Script Library</h1>
+  </div>
+  <div>
+    <button onclick="toggleDark()">🌙</button>
+    <button onclick="newScript()">➕ New</button>
+    <button onclick="syncGitHub()">☁ GitHub Sync</button>
+    <button onclick="exportJSON()">⬇ Export</button>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="dashboard">
+    <div class="card" onclick="openType('jquery')">
+      <h2>🟦 jQuery</h2>
+      <p>UI & Decipher JS</p>
+      <span class="badge" id="jqCount">0</span>
+    </div>
+    <div class="card" onclick="openType('python')">
+      <h2>🐍 Python</h2>
+      <p>Automation & XML</p>
+      <span class="badge" id="pyCount">0</span>
+    </div>
+  </div>
+
+  <!-- LIBRARY -->
+  <div id="library" class="library">
+    <div class="topbar">
+      <input id="search" class="search" placeholder="Search title, tags, code…">
+      <button onclick="goHome()">← Back</button>
+    </div>
+
+    <div id="grid" class="grid"></div>
+
+    <div id="editor" class="editor">
+      <input id="title" placeholder="Script title">
+      <input id="tags" placeholder="tags: popup, atm1d">
+      <textarea id="code"></textarea>
+      <div class="footer-actions">
+        <button onclick="save()">Save</button>
+        <button onclick="showDiff()">Diff</button>
+        <button class="danger" onclick="del()">Delete</button>
+      </div>
+    </div>
+
+    <div id="diff" class="diff"></div>
+  </div>
+
+</div>
+
+<script>
+// ================= CONFIG =================
+const OWNER="Manivannan3699";
+const REPO="cloud-script-library";
+const FILE_PATH="data/scripts.json";
+const BRANCH="main";
+const GITHUB_TOKEN=""; // keep local only
+const RAW_URL=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${FILE_PATH}`;
+// =========================================
+
+let scripts = JSON.parse(localStorage.scripts || "[]");
+let githubCache = [];
+let currentType = null;
+let idx = null;
+
+// INIT
+fetch(RAW_URL).then(r=>r.json()).then(d=>githubCache=d||[]);
+updateCounts();
+if(localStorage.dark==="1") document.body.classList.add("dark");
+
+// DASHBOARD
+function updateCounts(){
+  jqCount.textContent = scripts.filter(s=>s.type==="jquery").length;
+  pyCount.textContent = scripts.filter(s=>s.type==="python").length;
+}
+
+function openType(t){
+  currentType = t;
+  dashboard.style.display="none";
+  library.style.display="block";
+  idx = null;
+  render();
+}
+
+function goHome(){
+  library.style.display="none";
+  dashboard.style.display="grid";
+}
+
+// RENDER
+function render(){
+  grid.innerHTML="";
+  editor.style.display="none";
+  diff.style.display="none";
+  const q = search.value.toLowerCase();
+
+  scripts.forEach((s,i)=>{
+    if(s.type!==currentType) return;
+    if(q && !(`${s.title}${s.code}${s.tags.join()}`.toLowerCase().includes(q))) return;
+
+    const d=document.createElement("div");
+    d.className="script";
+    d.innerHTML=`<h4>${s.title}</h4><div class="tags">${s.tags.map(t=>`<span>${t}</span>`).join("")}</div>`;
+    d.onclick=()=>edit(i);
+    grid.appendChild(d);
+  });
+}
+
+// CRUD
+function newScript(){
+  const s={
+    type: currentType || "jquery",
+    title: "New Script",
+    code: "",
+    tags:[]
+  };
+  scripts.push(s);
+  idx = scripts.length-1;
+  localStorage.scripts = JSON.stringify(scripts);
+  openType(s.type);
+  edit(idx);
+}
+
+function edit(i){
+  idx=i;
+  editor.style.display="block";
+  title.value=scripts[i].title;
+  tags.value=scripts[i].tags.join(",");
+  code.value=scripts[i].code;
+}
+
+function save(){
+  if(idx===null) return;
+  scripts[idx]={
+    ...scripts[idx],
+    title:title.value.trim(),
+    code:code.value,
+    tags:tags.value.split(",").map(t=>t.trim()).filter(Boolean)
+  };
+  localStorage.scripts = JSON.stringify(scripts);
+  updateCounts();
+  render();
+}
+
+function del(){
+  if(idx===null || !confirm("Delete this script?")) return;
+  scripts.splice(idx,1);
+  idx=null;
+  localStorage.scripts = JSON.stringify(scripts);
+  updateCounts();
+  render();
+}
+
+// DIFF
+function showDiff(){
+  if(idx===null) return;
+  const remote=githubCache.find(g=>g.title===scripts[idx].title);
+  if(!remote){alert("No GitHub version found");return;}
+
+  const a=remote.code.split("\n");
+  const b=scripts[idx].code.split("\n");
+  let out="";
+  b.forEach((l,i)=>{
+    if(a[i]!==l){
+      if(a[i]) out+=`<div class="del">- ${a[i]}</div>`;
+      out+=`<div class="add">+ ${l}</div>`;
+    }
+  });
+  diff.innerHTML = out || "No changes";
+  diff.style.display="block";
+}
+
+// GITHUB SYNC
+async function syncGitHub(){
+  if(!GITHUB_TOKEN){alert("Add GitHub token");return;}
+  const api=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
+  const file=await (await fetch(api)).json();
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(scripts,null,2))));
+  await fetch(api,{
+    method:"PUT",
+    headers:{Authorization:`token ${GITHUB_TOKEN}`,"Content-Type":"application/json"},
+    body:JSON.stringify({message:"Update scripts",content,sha:file.sha,branch:BRANCH})
+  });
+  alert("Synced to GitHub");
+}
+
+// UTIL
+function exportJSON(){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(scripts,null,2)]));
+  a.download="scripts.json";
+  a.click();
+}
+function toggleDark(){
+  document.body.classList.toggle("dark");
+  localStorage.dark=document.body.classList.contains("dark")?"1":"0";
+}
+
+// SEARCH + SHORTCUTS
+search.oninput=render;
+document.addEventListener("keydown",e=>{
+  if(e.ctrlKey && e.key==="n"){e.preventDefault();newScript();}
+  if(e.ctrlKey && e.key==="s"){e.preventDefault();save();}
+  if(e.ctrlKey && e.key==="/"){e.preventDefault();search.focus();}
+});
+</script>
+
+</body>
+</html>
