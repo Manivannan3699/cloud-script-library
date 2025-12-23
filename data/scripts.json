@@ -81,8 +81,10 @@
   },
   {
     "type": "jquery",
-    "title": "New Script",
-    "code": "",
-    "tags": []
+    "title": "Change Total text in autosumdq question.",
+    "code": "<style label=\"m1\"\n       arg:txt=\"of all CSU patients I refer to another physician for management\"\n       name=\"question.after\"><![CDATA[\n<script>\n(function () {\n\n    var txt = '${txt}';\n    var timer = setInterval(function () {\n\n        var $el = $ ('td.sq-autosum-empty span.sumTotalVal');\n\n        if ($el.length) {\n            $el.html('<b>' + txt + '</b>');\n            clearInterval(timer); // stop once applied\n        }\n\n    }, 100); // check every 100ms\n\n})();\n</script>\n\n<style>\n.sq-autosum-empty {\n    text-align: center !important;\n}\n</style>\n]]></style>\n",
+    "tags": [
+      "style"
+    ]
   }
 ]
