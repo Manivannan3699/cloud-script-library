@@ -142,5 +142,11 @@
     "tags": [
       "custom setup"
     ]
+  },
+  {
+    "type": "jquery",
+    "title": "New Script",
+    "code": "",
+    "tags": []
   }
 ]
