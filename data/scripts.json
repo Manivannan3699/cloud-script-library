@@ -206,5 +206,13 @@
     "tags": [
       "Numeric JS"
     ]
+  },
+  {
+    "type": "jquery",
+    "title": "Auto adjust the width of all numeric box based on range",
+    "code": "<style cond=\"1\" name=\"question.after\"><![CDATA[\n<script>\n$ (function () {\n    var qn = ${jsexport()};\n    var minValue = qn.minValue || 0;\n    var maxValue = qn.maxValue || 9999999999;\n    var maxDigits = String(Math.abs(Math.floor(maxValue))).length;\n\n    var $container = $ (\"#question_\" + qn.label);\n\n    $container.find(\"input[type='number']\").each(function () {\n        var $input = $ (this);\n\n        // Set numeric attributes\n        $input\n          .attr(\"min\", minValue)\n          .attr(\"max\", maxValue)\n          .attr(\"maxlength\", maxDigits)\n          .attr(\"inputmode\", \"numeric\")\n          .attr(\"pattern\", \"[0-9]*\");\n\n        // Remove non-digit chars and limit digits while typing\n        $input.on(\"input\", function () {\n            let v = $ (this).val().replace(/\\D/g, \"\").slice(0, maxDigits);\n            $ (this).val(v);\n        });\n\n        // Validate on blur\n        $input.on(\"blur\", function () {\n            let v = $ (this).val();\n            if (v === \"\") return;\n\n            let num = parseInt(v, 10);\n            if (num < minValue || num > maxValue) {\n                // alert(\"⚠️ Value must be between \" + minValue + \" and \" + maxValue + \".\");\n            }\n        });\n    });\n});\n</script>\n]]></style>",
+    "tags": [
+      "Numeric JS"
+    ]
   }
 ]
