@@ -145,6 +145,14 @@
   },
   {
     "type": "jquery",
+    "title": "Bubble sort",
+    "code": "<text \n  label=\"QT1\"\n  optional=\"0\"\n  size=\"25\">\n  <title>New Text Question</title>\n  <row label=\"r1\"/>\n  <row label=\"r2\"/>\n  <row label=\"r3\"/>\n  <row label=\"r4\"/>\n  <row label=\"r5\"/>\n  <noanswer label=\"r6\">None</noanswer>\n  <style name=\"question.after\"><![CDATA[\n<script>\nwindow.addEventListener('change', function() {\n\t\t\tvar boxes = document.querySelectorAll('input[type=\"text\"]');\n\t\t\tfor (var j = 0; j < 10; j++) {\n\t\t\t\tfor (var i = boxes.length - 1; i >= 1; i--) {\n\t\t\t\t\tif (boxes[i].value && !boxes[i-1].value) {\n\t\t\t\t\t\tboxes[i-1].value = boxes[i].value;\n\t\t\t\t\t\tboxes[i].value = '';\n\t\t\t\t}\n\t\t\t}}\n\t\t});\n</script>\n]]></style>\n</text>\n\n<suspend/>\n\n<text \n  label=\"QT2\"\n  optional=\"0\"\n  size=\"25\">\n  <title>New Text Question</title>\n  <row label=\"r1\"/>\n  <row label=\"r2\"/>\n  <row label=\"r3\"/>\n  <row label=\"r4\"/>\n  <row label=\"r5\"/>\n  <noanswer label=\"r6\">None</noanswer>\n  <style cond=\"1\" name=\"question.after\"><![CDATA[\n<script>\nvar boxes = document.querySelectorAll('input[type=\"text\"]');\nconsole.log(boxes.length)\n\nsetInterval(function () {\n    for (var i = 2; i < boxes.length; i++) {\n        if ($ ('.text-input').eq(i).val() === \"\") {\n            // Hide the parent div containing the current text input\n            $ ('.text-input').eq(i).closest('div.element').next().hide();\n        } else {\n            // Show the next parent div if the input is not empty\n            $ ('.text-input').eq(i).closest('div.element').next().show();\n        }\n    }\n}, 0);\n\nwindow.addEventListener('change', function() {\n\t\t\tfor (var j = 0; j < boxes.length; j++) {\n\t\t\t\tfor (var i = boxes.length - 1; i >= 1; i--) {\n\t\t\t\t\tif (boxes[i].value && !boxes[i-1].value) {\n\t\t\t\t\t\tboxes[i-1].value = boxes[i].value;\n\t\t\t\t\t\tboxes[i].value = '';\n\t\t\t\t}\n\t\t\t}}\n\t\t});\n\n</script>\n]]></style>\n</text>\n",
+    "tags": [
+      "Text"
+    ]
+  },
+  {
+    "type": "jquery",
     "title": "New Script",
     "code": "",
     "tags": []
